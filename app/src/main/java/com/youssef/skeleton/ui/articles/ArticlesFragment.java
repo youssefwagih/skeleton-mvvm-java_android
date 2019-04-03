@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import com.youssef.skeleton.R;
 import com.youssef.skeleton.adapters.ArticlesAdapter;
-import com.youssef.skeleton.databinding.FragmentArticlessBinding;
 import com.youssef.skeleton.data.remote.models.ArticlesResponse;
+import com.youssef.skeleton.databinding.FragmentArticlessBinding;
 
 
 public class ArticlesFragment extends Fragment {
@@ -30,6 +30,14 @@ public class ArticlesFragment extends Fragment {
 
     public static ArticlesFragment newInstance() {
         return new ArticlesFragment();
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+      //  AndroidSupportInjection.inject(this);
+
     }
 
     @Override

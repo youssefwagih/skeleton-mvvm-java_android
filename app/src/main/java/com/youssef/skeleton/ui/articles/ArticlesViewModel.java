@@ -6,7 +6,10 @@ import android.arch.lifecycle.ViewModel;
 
 import com.youssef.skeleton.data.remote.models.ArticlesResponse;
 import com.youssef.skeleton.data.repository.DataManager;
-import com.youssef.skeleton.data.repository.DataManagerImp;
+import com.youssef.skeleton.di.component.ApiComponent;
+import com.youssef.skeleton.di.component.DaggerApiComponent;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,7 +21,9 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class ArticlesViewModel extends ViewModel {
-    private DataManager dataManager = new DataManagerImp();
+
+    @Inject
+    DataManager dataManager;
 
     final MutableLiveData<ArticlesResponse> articlesResponseMutableLiveData = new MutableLiveData<>();
     final MutableLiveData<Boolean> loading = new MutableLiveData<>();
@@ -26,6 +31,10 @@ public class ArticlesViewModel extends ViewModel {
 
     public ArticlesViewModel() {
         super();
+
+        ApiComponent apiComponent = DaggerApiComponent.create();
+        apiComponent.inject(this);
+
         fetchArticlesItems();
     }
 

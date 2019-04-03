@@ -2,7 +2,8 @@ package com.youssef.skeleton.data.repository;
 
 import com.youssef.skeleton.data.remote.GetDataService;
 import com.youssef.skeleton.data.remote.models.ArticlesResponse;
-import com.youssef.skeleton.network.RetrofitClientInstance;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
@@ -11,13 +12,15 @@ import io.reactivex.Observable;
  */
 
 public class DataManagerImp implements DataManager {
+    GetDataService service;
 
-    public DataManagerImp() {
+    @Inject
+    public DataManagerImp(GetDataService service) {
+        this.service = service;
     }
 
     @Override
     public Observable<ArticlesResponse> getArticlesItems() {
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         return service.getArticlesItems();
     }
 }
