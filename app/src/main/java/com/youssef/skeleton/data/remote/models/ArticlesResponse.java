@@ -1,4 +1,4 @@
-package com.youssef.skeleton.repository.model;
+package com.youssef.skeleton.data.remote.models;
 
 import com.google.gson.annotations.SerializedName;
 

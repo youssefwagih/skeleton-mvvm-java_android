@@ -4,12 +4,14 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.youssef.skeleton.repository.DataManager;
-import com.youssef.skeleton.repository.DataManagerImp;
-import com.youssef.skeleton.repository.model.ArticlesResponse;
+import com.youssef.skeleton.data.remote.models.ArticlesResponse;
+import com.youssef.skeleton.data.repository.DataManager;
+import com.youssef.skeleton.data.repository.DataManagerImp;
 
-import retrofit2.Call;
-import retrofit2.Callback;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Youssef.Waguih on 9/24/2018.
@@ -18,9 +20,9 @@ import retrofit2.Callback;
 public class ArticlesViewModel extends ViewModel {
     private DataManager dataManager = new DataManagerImp();
 
-    public final MutableLiveData<ArticlesResponse> articlesResponseMutableLiveData = new MutableLiveData<>();
-    public final MutableLiveData<Boolean> loading = new MutableLiveData<>();
-    public final MutableLiveData<Boolean> errorMutableLiveData = new MutableLiveData<>();
+    final MutableLiveData<ArticlesResponse> articlesResponseMutableLiveData = new MutableLiveData<>();
+    final MutableLiveData<Boolean> loading = new MutableLiveData<>();
+    final MutableLiveData<Boolean> errorMutableLiveData = new MutableLiveData<>();
 
     public ArticlesViewModel() {
         super();
@@ -30,18 +32,34 @@ public class ArticlesViewModel extends ViewModel {
     private void fetchArticlesItems() {
         loading.setValue(true);
 
-        dataManager.getArticlesItems(new Callback<ArticlesResponse>() {
-            @Override
-            public void onResponse(Call<ArticlesResponse> call, retrofit2.Response<ArticlesResponse> response) {
-                onArticlesSuccess(response);
+        dataManager.getArticlesItems()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ArticlesResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onFailure(Call<ArticlesResponse> call, Throwable t) {
-                onArticlesFailure();
-            }
-        });
+                    @Override
+                    public void onNext(ArticlesResponse articlesResponse) {
+                        loading.setValue(false);
+                        errorMutableLiveData.setValue(false);
+                        articlesResponseMutableLiveData.setValue(articlesResponse);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        loading.setValue(false);
+                        errorMutableLiveData.setValue(true);
+                        articlesResponseMutableLiveData.setValue(null);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     LiveData<ArticlesResponse> getArticlesItems() {
@@ -54,18 +72,5 @@ public class ArticlesViewModel extends ViewModel {
 
     LiveData<Boolean> getError() {
         return errorMutableLiveData;
-    }
-
-    public void onArticlesSuccess(retrofit2.Response<ArticlesResponse> response) {
-        loading.setValue(false);
-        errorMutableLiveData.setValue(false);
-        articlesResponseMutableLiveData.setValue(response.body());
-    }
-
-    public void onArticlesFailure() {
-
-        loading.setValue(false);
-        errorMutableLiveData.setValue(true);
-        articlesResponseMutableLiveData.setValue(null);
     }
 }

@@ -1,8 +1,7 @@
-package com.youssef.skeleton.repository.remote;
+package com.youssef.skeleton.data.remote;
 
-import com.youssef.skeleton.repository.model.ArticlesResponse;
+import com.youssef.skeleton.data.remote.models.ArticlesResponse;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
 
 /**
@@ -12,5 +11,5 @@ import retrofit2.http.GET;
 
 public interface GetDataService {
     @GET("/svc/mostpopular//v2/viewed/1.json?api-key=IsDnmgfMSOpuJZnkqsnlJHeEAZnwzpvV")
-    Call<ArticlesResponse> getArticlesItems();
+    io.reactivex.Observable<ArticlesResponse> getArticlesItems();
 }

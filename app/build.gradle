@@ -20,13 +20,20 @@ android {
     }
 }
 
+android {
+    dataBinding {
+        enabled = true
+    }
+}
+
 def supportVersion = '27.1.1'
-def retrofitVersion = '2.3.0'
+def retrofitVersion = '2.4.0'
 def lifeCycleVersion = '1.1.1'
 def constraintLayout = '1.1.3'
 def picasso = '2.5.2'
 def dexter = '4.2.0'
 def circularImageview = '3.0.0'
+def rxAndroid = '2.1.0'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -38,11 +45,13 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$supportVersion"
     implementation "com.squareup.picasso:picasso:$picasso"
 
-    //android component
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
+
     implementation "android.arch.lifecycle:extensions:$lifeCycleVersion"
     implementation "com.android.support:support-v4:$supportVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$lifeCycleVersion"
 
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 

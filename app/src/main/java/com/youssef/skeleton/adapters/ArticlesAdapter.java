@@ -1,14 +1,13 @@
 package com.youssef.skeleton.adapters;
 
-import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.youssef.skeleton.BindingViewHolder;
 import com.youssef.skeleton.R;
-import com.youssef.skeleton.repository.model.ResultsItem;
+import com.youssef.skeleton.data.remote.models.ResultsItem;
 
 import java.util.List;
 
@@ -16,46 +15,24 @@ import java.util.List;
  * Created by Youssef.Waguih on 9/24/2018.
  */
 
-public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.CustomViewHolder> {
+public class ArticlesAdapter extends RecyclerView.Adapter<BindingViewHolder> {
 
     private List<ResultsItem> dataList;
-    private Context context;
 
-    public ArticlesAdapter(Context context, List<ResultsItem> dataList) {
-        this.context = context;
+    public ArticlesAdapter(List<ResultsItem> dataList) {
         this.dataList = dataList;
     }
 
-    class CustomViewHolder extends RecyclerView.ViewHolder {
-
-        public final View mView;
-
-        TextView txtTitle;
-        TextView txtAuthor;
-        TextView txtPublishedDate;
-
-        CustomViewHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-
-            txtTitle = mView.findViewById(R.id.txtTitle);
-            txtAuthor = mView.findViewById(R.id.txtAuthor);
-            txtPublishedDate = mView.findViewById(R.id.txtPublishedDate);
-        }
-    }
-
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.article_item, parent, false);
-        return new CustomViewHolder(view);
+        return new BindingViewHolder(DataBindingUtil.inflate(layoutInflater,
+                R.layout.article_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        holder.txtTitle.setText(dataList.get(position).getTitle());
-        holder.txtAuthor.setText(dataList.get(position).getByline());
-        holder.txtPublishedDate.setText(dataList.get(position).getPublishedDate());
+    public void onBindViewHolder(BindingViewHolder holder, int position) {
+        holder.getBinding().setVariable(1, dataList.get(position));
     }
 
     @Override
