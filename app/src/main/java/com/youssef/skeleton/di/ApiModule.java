@@ -17,15 +17,17 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    Retrofit providesRetrofit() {
-        return RetrofitClientInstance.getRetrofitInstance();
+    GetDataService provideAPIService(Retrofit retrofit) {
+        return retrofit.create(GetDataService.class);
     }
 
     @Provides
     @Singleton
-    GetDataService provideAPIService(Retrofit retrofit) {
-        return retrofit.create(GetDataService.class);
+    Retrofit providesRetrofit() {
+        return RetrofitClientInstance.getRetrofitInstance();
     }
+
+
 
 
     @Provides
